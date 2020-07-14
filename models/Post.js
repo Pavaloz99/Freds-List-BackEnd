@@ -6,18 +6,29 @@ const postSchema = new Schema({
         type: String,
         required: true,
     },
-    Description: {
+    description: {
         type: String,
         required: true,
     },
-    Condition: String,
-    Asking: String,
-    Image: String,
-    Category: String,
+    condition: {
+        type: String,
+        required: true
+    },
+    asking: {
+        type: String,
+        required: true
+    },
+    category: {
+        type: String,
+        required: true
+    },
     User: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    image: Buffer,
+}, {
+    timestamps: true
 });
 
 const Post = mongoose.model("Post", postSchema);
