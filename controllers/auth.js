@@ -21,7 +21,7 @@ const register = async (req, res) => {
             return res.status(201).json({
                 status: 201,
                 message: "success",
-                createdUser
+                createdUser: createdUser,
             });
     } catch (err) {
             return res.status(500).json({
@@ -36,14 +36,14 @@ const login = async (req, res) => {
         const foundUser = await db.User.findOne({email: req.body.email})
         if(foundUser) {
             req.session.User = foundUser;
-            console.log(req.session)
-            res.json({
+            console.log("this", req.session)
+            res.status(200).json({
                 message: "You are successfully logged in",
                 auth: true,
             })
         } else {
-            res.json({
-                messeage: "Unable to login"
+            res.status(401).json({
+                message: "Unable to login"
             })
         }
      
@@ -60,7 +60,7 @@ const login = async (req, res) => {
 const account = async (req, res) => {
     try{
     if(req.session){
-        console.log(req.session)
+        console.log("this", req.session)
     await db.User.findById(req.session.User, function(err, foundUser){
         if (err) {
             console.log(err)
@@ -115,7 +115,7 @@ const addUserDislike = async (req, res) => {
         let currentUser = await db.User.findById(req.session.User._id);
         let user = await db.User.findById(req.params.id);
 
-        if(currentUser !== user){
+        if(currentUser._id.toString() !== user._id.toString()){
 
             await user.Rating.push(0);
             await user.save();
@@ -130,6 +130,9 @@ const addUserDislike = async (req, res) => {
             });
         } else {
             console.log("Nice Try");
+            res.status(401).json({
+                message: "Nope"
+            })
         }
     } catch(err){
         console.log(err)
