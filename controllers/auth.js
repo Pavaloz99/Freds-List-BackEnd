@@ -146,11 +146,11 @@ const follow = async (req, res) => {
     if(currentUser._id.toString() !== user._id.toString()){
 
         await currentUser.Following.push(user._id);
-        await user.Followers.push(currentUser._id);
+        await userToFollow.Followers.push(currentUser._id);
 
         res.status(200).json({
             status: 200,
-            message: `You've followed ${user.username}`,
+            message: `You've followed ${userToFollow.username}`,
         });
     } else {
         res.status(401).json({
@@ -167,4 +167,5 @@ module.exports = {
     logout,
     addUserDislike,
     addUserLike,
+    follow,
 }
