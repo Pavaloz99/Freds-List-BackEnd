@@ -37,6 +37,10 @@ const userSchema = new Schema ({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
     }],
+    hasRated: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     signupDate: {
         type: Date,
         default: Date.now,

@@ -46,23 +46,7 @@ const login = async (req, res) => {
                 messeage: "Unable to login"
             })
         }
-        // console.log(foundUser)
-        // if(!foundUser){
-        //     return res.status(400).json({
-        //         status: 400,
-        //         message: "Incorrect Email or Password"
-        //     });
-        // }
-        // const match = await bcrypt.compare(req.body.password, foundUser.password);
-        // if(!match) {
-        //     return res.status(400).json({
-        //         status: 400,
-        //         message: "Incorrect Email or Password"
-        //     });
-        // }
-        // console.log(req.session.id)
-         
-        // return foundUser;
+     
         
     } catch (err) {
         console.log(err)
@@ -97,9 +81,67 @@ const logout = async (req, res) => {
 }
 
 
+const addUserLike = async (req, res) => {
+    try {
+        console.log(req.session)
+        let currentUser = await db.User.findById(req.session.User._id);
+        let user = await db.User.findById(req.params.id);
+        if(currentUser._id.toString() !== user._id.toString()){
+
+            await user.Rating.push(1);
+            await user.save();
+
+            await currentUser.hasRated.push(user._id);
+            await currentUser.save();
+            
+
+            res.status(200).json({
+                user: user,
+                message: "You liked this user"
+            });
+        } else {
+            console.log("Nice Try");
+            res.status(401).json({
+                Message: "Nope"
+            })
+        }
+    } catch(err){
+        console.log(err)
+    }
+}
+
+const addUserDislike = async (req, res) => {
+    try {
+        let currentUser = await db.User.findById(req.session.User._id);
+        let user = await db.User.findById(req.params.id);
+
+        if(currentUser !== user){
+
+            await user.Rating.push(0);
+            await user.save();
+
+            await currentUser.hasRated.push(user._id);
+            await currentUser.save();
+            
+
+            res.status(200).json({
+                user: user,
+                message: "You liked this user"
+            });
+        } else {
+            console.log("Nice Try");
+        }
+    } catch(err){
+        console.log(err)
+    }
+}
+
+
 module.exports = {
     register,
     account,
     login,
     logout,
+    addUserDislike,
+    addUserLike,
 }

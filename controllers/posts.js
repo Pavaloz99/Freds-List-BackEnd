@@ -1,8 +1,8 @@
 const db = require('../models');
 const multer = require('multer');
 
-const index = (req, res) => {
-    db.Post.find({}).populate('User').exec( (err, foundPosts) => {
+const index = async (req, res) => {
+    await db.Post.find({}).populate('User').exec( (err, foundPosts) => {
         if (err) console.log('Error in postsIndex:', err)
 
         if(!foundPosts) return res.json({
@@ -21,7 +21,7 @@ const grabOne = (req, res) => {
         if(!foundPost) return res.json({
             message: 'No such Post found in database'
         });
-
+        console.log(req.session)
         res.status(200).json({post: foundPost});
     });
 }
@@ -29,22 +29,25 @@ const grabOne = (req, res) => {
 
 const create = async (req, res) => {
     try{
-    let post = await db.Post.create(req.body);
+    let post = await db.Post.create({...req.body, User: req.session.User._id});
     console.log(req.body);
     let user = await db.User.findById(req.session.User._id);
     console.log("This one", req.session);
 
-        post.User = user;
-        post.image = req.file.buffer
-        post.save();
+        post.image = await req.file.buffer;
+        await post.save();
+
+        await user.Posts.push(post);
+        await user.save();
         
 
         res.status(201).json({ post: post});
-        return post;
     } catch(err) {
         console.log(err);
     }
 }
+
+
 
 
 const drop = async (req, res) => {
