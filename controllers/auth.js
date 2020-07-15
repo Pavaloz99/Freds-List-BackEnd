@@ -139,6 +139,26 @@ const addUserDislike = async (req, res) => {
     }
 }
 
+const follow = async (req, res) => {
+    let currentUser = await db.User.findById(req.session.User._id);
+    let userToFollow = await db.User.findById(req.params.id);
+
+    if(currentUser._id.toString() !== user._id.toString()){
+
+        await currentUser.Following.push(user._id);
+        await user.Followers.push(currentUser._id);
+
+        res.status(200).json({
+            status: 200,
+            message: `You've followed ${user.username}`,
+        });
+    } else {
+        res.status(401).json({
+            message: "Nope"
+        });
+    }
+}
+
 
 module.exports = {
     register,
