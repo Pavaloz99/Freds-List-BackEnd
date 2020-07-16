@@ -48,6 +48,18 @@ const create = async (req, res) => {
 }
 
 
+const editPost = async (req, res) => {
+    try {
+        const updatedPost = await db.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        res.status(200).json({
+            status: "200",
+            message: "Post Updated Successfully",
+        })
+    } catch(err){
+        console.log(err)
+    }
+}
+
 
 
 const drop = async (req, res) => {
@@ -73,4 +85,5 @@ module.exports = {
     create,
     drop,
     grabOne,
+    editPost,
 }

@@ -19,6 +19,7 @@ router.get('/', ctrl.posts.index)
 router.post('/', upload.single('image'), ctrl.posts.create)
 router.delete('/:id/delete', ctrl.posts.drop)
 router.get('/:id', ctrl.posts.grabOne)
+router.put("/:id", upload.single('image'), ctrl.posts.editPost)
 
 
 // exports
