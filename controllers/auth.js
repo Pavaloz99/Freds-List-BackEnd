@@ -57,7 +57,7 @@ const login = async (req, res) => {
     }
 }
 
-const account = async (req, res) => {
+const myAccount = async (req, res) => {
     try{
     if(req.session){
         console.log("this", req.session)
@@ -75,6 +75,17 @@ const account = async (req, res) => {
 
    
 }
+
+const anyAccount = async (req, res) => {
+    await db.User.findById(req.params.id).populate('Posts').exec((err, foundUser) => {
+        if (err) {
+            console.log(err)
+        } else {
+            return res.status(200).send(foundUser);
+        }
+    }); 
+    } 
+
 
 const logout = async (req, res) => {
     await req.session.destroy();
@@ -143,10 +154,13 @@ const follow = async (req, res) => {
     let currentUser = await db.User.findById(req.session.User._id);
     let userToFollow = await db.User.findById(req.params.id);
 
-    if(currentUser._id.toString() !== user._id.toString()){
+    if(currentUser._id.toString() !== userToFollow._id.toString()){
 
-        await currentUser.Following.push(user._id);
+        await currentUser.Following.push(userToFollow._id);
         await userToFollow.Followers.push(currentUser._id);
+
+        await currentUser.save();
+        await userToFollow.save();
 
         res.status(200).json({
             status: 200,
@@ -162,7 +176,8 @@ const follow = async (req, res) => {
 
 module.exports = {
     register,
-    account,
+    myAccount,
+    anyAccount,
     login,
     logout,
     addUserDislike,

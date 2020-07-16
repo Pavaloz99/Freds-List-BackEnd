@@ -27,7 +27,7 @@ const userSchema = new Schema ({
     }],
     Watchlist: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Watchlist'
+        ref: 'Post'
     },
     Chats: [{
         type: mongoose.Schema.Types.ObjectId,
