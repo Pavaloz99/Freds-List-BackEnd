@@ -1,6 +1,7 @@
 const db = require('../models');
 const multer = require('multer');
 
+
 const index = async (req, res) => {
     await db.Post.find({}).populate('User').exec( (err, foundPosts) => {
         if (err) console.log('Error in postsIndex:', err)
@@ -50,11 +51,17 @@ const create = async (req, res) => {
 
 const editPost = async (req, res) => {
     try {
-        const updatedPost = await db.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        const updatedPost = await db.Post.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        console.log(req.file);
+        
+        updatedPost.image = await req.file.buffer;
+        await updatedPost.save();
+
         res.status(200).json({
             status: "200",
             message: "Post Updated Successfully",
-        })
+            post: updatedPost,
+        });
     } catch(err){
         console.log(err)
     }

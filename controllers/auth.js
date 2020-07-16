@@ -102,7 +102,7 @@ const addUserLike = async (req, res) => {
             await user.Rating.push(1);
             await user.save();
 
-            await currentUser.hasRated.push(user._id);
+            await currentUser.hasLiked.push(user._id);
             await currentUser.save();
             
 
@@ -127,11 +127,27 @@ const addUserDislike = async (req, res) => {
         let user = await db.User.findById(req.params.id);
 
         if(currentUser._id.toString() !== user._id.toString()){
+            if(currentUser.hasDisliked.includes(user._id)){
+                await user.Rating.shift();
+                await user.save();
 
-            await user.Rating.push(0);
+                for(let i = 0; i < currentUser.hasDisliked.length; i++){
+                    if(currentUser.hasDisliked[i] === user._id){
+                        await currentUser.hasDisliked.splice(i, 1);
+                        return currentUser;
+                    }
+                }
+                await currentUser.save();
+
+                res.status(200).json({
+                    user: user,
+                    message: "You removed your dislike"
+                });
+            } else{
+            await user.Rating.unshift(0);
             await user.save();
 
-            await currentUser.hasRated.push(user._id);
+            await currentUser.hasDisliked.push(user._id);
             await currentUser.save();
             
 
@@ -139,6 +155,7 @@ const addUserDislike = async (req, res) => {
                 user: user,
                 message: "You liked this user"
             });
+            }
         } else {
             console.log("Nice Try");
             res.status(401).json({
