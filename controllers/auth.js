@@ -97,7 +97,38 @@ const addUserLike = async (req, res) => {
         console.log(req.session)
         let currentUser = await db.User.findById(req.session.User._id);
         let user = await db.User.findById(req.params.id);
-        if(currentUser._id.toString() !== user._id.toString()){
+            if(currentUser._id.toString() !== user._id.toString()){
+                if(currentUser.hasLiked.includes(user._id)){
+                    await user.Rating.pop();
+                    await user.save();
+    
+                    for(let i = 0; i < currentUser.hasLiked.length; i++){
+                        if(currentUser.hasLiked[i] === user._id){
+                            await currentUser.hasLiked.splice(i, 1);
+                            return currentUser;
+                        }
+                    }
+                    await currentUser.save();
+    
+                    res.status(200).json({
+                        user: user,
+                        message: "You removed your like"
+                    });
+                } else if(currentUser.hasDisliked.includes(user._id)){
+                    await user.Rating.shift();
+                    await user.Rating.push(1);
+
+                    for(let i = 0; i < currentUser.hasDisliked.length; i++){
+                        if(currentUser.hasDisliked[i] === user._id){
+                            await currentUser.hasDisliked.splice(i, 1);
+                            return currentUser;
+                        }
+                    }
+                    
+                    await currentUser.hasLiked.push(user._id);
+                    await currentUser.save();
+                }
+                  else{
 
             await user.Rating.push(1);
             await user.save();
@@ -110,6 +141,7 @@ const addUserLike = async (req, res) => {
                 user: user,
                 message: "You liked this user"
             });
+        }
         } else {
             console.log("Nice Try");
             res.status(401).json({
@@ -143,7 +175,21 @@ const addUserDislike = async (req, res) => {
                     user: user,
                     message: "You removed your dislike"
                 });
-            } else{
+            } else if(currentUser.hasLiked.includes(user._id)){
+                await user.Rating.shift();
+                    await user.Rating.push(1);
+
+                    for(let i = 0; i < currentUser.hasDisliked.length; i++){
+                        if(currentUser.hasDisliked[i] === user._id){
+                            await currentUser.hasDisliked.splice(i, 1);
+                            return currentUser;
+                        }
+                    }
+                    
+                    await currentUser.hasLiked.push(user._id);
+                    await currentUser.save();
+            } 
+            else{
             await user.Rating.unshift(0);
             await user.save();
 
