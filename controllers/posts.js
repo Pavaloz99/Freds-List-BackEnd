@@ -40,6 +40,101 @@ const findCategoryElectronics = (req, res) => {
     });
 }
 
+const findCategoryHomeAndBath = (req, res) => {
+    console.log(req.body);
+    db.Post.find({category: "Home And Bath"}).populate('User').exec((err, foundPost) => {
+        console.log(foundPost)
+        if(err) console.log(err);
+
+        if(!foundPost) return res.json({
+            message: "No such Posts found"
+        });
+        res.status(200).json({post: foundPost});
+    });
+}
+
+const findCategoryClothing = (req, res) => {
+    console.log(req.body);
+    db.Post.find({category: "Clothing"}).populate('User').exec((err, foundPost) => {
+        console.log(foundPost)
+        if(err) console.log(err);
+
+        if(!foundPost) return res.json({
+            message: "No such Posts found"
+        });
+        res.status(200).json({post: foundPost});
+    });
+}
+
+const findCategoryPetSupplies = (req, res) => {
+    console.log(req.body);
+    db.Post.find({category: "Pet Supplies"}).populate('User').exec((err, foundPost) => {
+        console.log(foundPost)
+        if(err) console.log(err);
+
+        if(!foundPost) return res.json({
+            message: "No such Posts found"
+        });
+        res.status(200).json({post: foundPost});
+    });
+}
+
+const findCategoryBeautyAndHealth = (req, res) => {
+    console.log(req.body);
+    db.Post.find({category: "Beauty And Health"}).populate('User').exec((err, foundPost) => {
+        console.log(foundPost)
+        if(err) console.log(err);
+
+        if(!foundPost) return res.json({
+            message: "No such Posts found"
+        });
+        res.status(200).json({post: foundPost});
+    });
+}
+
+const findCategoryToys = (req, res) => {
+    console.log(req.body);
+    db.Post.find({category: "Toys"}).populate('User').exec((err, foundPost) => {
+        console.log(foundPost)
+        if(err) console.log(err);
+
+        if(!foundPost) return res.json({
+            message: "No such Posts found"
+        });
+        res.status(200).json({post: foundPost});
+    });
+}
+
+const findCategoryHandmade = (req, res) => {
+    console.log(req.body);
+    db.Post.find({category: "Handmade"}).populate('User').exec((err, foundPost) => {
+        console.log(foundPost)
+        if(err) console.log(err);
+
+        if(!foundPost) return res.json({
+            message: "No such Posts found"
+        });
+        res.status(200).json({post: foundPost});
+    });
+}
+
+const findCategorySports = (req, res) => {
+    console.log(req.body);
+    db.Post.find({category: "Sports"}).populate('User').exec((err, foundPost) => {
+        console.log(foundPost)
+        if(err) console.log(err);
+
+        if(!foundPost) return res.json({
+            message: "No such Posts found"
+        });
+        res.status(200).json({post: foundPost});
+    });
+}
+
+
+
+
+
 
 const create = async (req, res) => {
     try{
@@ -107,4 +202,11 @@ module.exports = {
     grabOne,
     editPost,
     findCategoryElectronics,
+    findCategoryBeautyAndHealth,
+    findCategoryClothing,
+    findCategoryHandmade,
+    findCategoryHomeAndBath,
+    findCategoryPetSupplies,
+    findCategorySports,
+    findCategoryToys,
 }
