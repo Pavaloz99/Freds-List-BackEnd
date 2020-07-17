@@ -27,6 +27,18 @@ const grabOne = (req, res) => {
     });
 }
 
+const findCategory = (req, res) => {
+    console.log(req.body);
+    db.Post.find({Category: req.body}).populate('User').exec((err, foundPost) => {
+        if(err) console.log(err);
+
+        if(!foundPost) return res.json({
+            message: "No such Posts found"
+        });
+        res.status(200).json({post: foundPost});
+    });
+}
+
 
 const create = async (req, res) => {
     try{
@@ -93,4 +105,5 @@ module.exports = {
     drop,
     grabOne,
     editPost,
+    findCategory,
 }
