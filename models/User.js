@@ -37,7 +37,11 @@ const userSchema = new Schema ({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
     }],
-    hasRated: [{
+    hasLiked: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    hasDisliked: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],

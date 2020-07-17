@@ -101,32 +101,37 @@ const addUserLike = async (req, res) => {
                 if(currentUser.hasLiked.includes(user._id)){
                     await user.Rating.pop();
                     await user.save();
-    
+                    console.log("hello");
                     for(let i = 0; i < currentUser.hasLiked.length; i++){
-                        if(currentUser.hasLiked[i] === user._id){
+                        console.log(currentUser.hasLiked[i].toString() === user._id.toString())
+                        if(currentUser.hasLiked[i].toString() === user._id.toString()){
                             await currentUser.hasLiked.splice(i, 1);
-                            return currentUser;
+                            await currentUser.save();
                         }
                     }
-                    await currentUser.save();
     
                     res.status(200).json({
-                        user: user,
+                        user: currentUser,
                         message: "You removed your like"
                     });
                 } else if(currentUser.hasDisliked.includes(user._id)){
                     await user.Rating.shift();
                     await user.Rating.push(1);
+                    await user.save();
 
                     for(let i = 0; i < currentUser.hasDisliked.length; i++){
-                        if(currentUser.hasDisliked[i] === user._id){
+                        if(currentUser.hasDisliked[i].toString() === user._id.toString()){
                             await currentUser.hasDisliked.splice(i, 1);
-                            return currentUser;
                         }
                     }
                     
                     await currentUser.hasLiked.push(user._id);
                     await currentUser.save();
+
+                    res.status(200).json({
+                        user: currentUser,
+                        message: "You swapped to liked"
+                    })
                 }
                   else{
 
@@ -164,9 +169,8 @@ const addUserDislike = async (req, res) => {
                 await user.save();
 
                 for(let i = 0; i < currentUser.hasDisliked.length; i++){
-                    if(currentUser.hasDisliked[i] === user._id){
+                    if(currentUser.hasDisliked[i].toString() === user._id.toString()){
                         await currentUser.hasDisliked.splice(i, 1);
-                        return currentUser;
                     }
                 }
                 await currentUser.save();
@@ -176,18 +180,22 @@ const addUserDislike = async (req, res) => {
                     message: "You removed your dislike"
                 });
             } else if(currentUser.hasLiked.includes(user._id)){
-                await user.Rating.shift();
-                    await user.Rating.push(1);
+                await user.Rating.pop();
+                await user.Rating.unshift(0);
+                await user.save();
 
-                    for(let i = 0; i < currentUser.hasDisliked.length; i++){
-                        if(currentUser.hasDisliked[i] === user._id){
-                            await currentUser.hasDisliked.splice(i, 1);
-                            return currentUser;
+                    for(let i = 0; i < currentUser.hasLiked.length; i++){
+                        if(currentUser.hasLiked[i].toString() === user._id.toString()){
+                            await currentUser.hasLiked.splice(i, 1);
+                            await currentUser.save();
                         }
                     }
                     
-                    await currentUser.hasLiked.push(user._id);
+                    await currentUser.hasDisliked.push(user._id);
                     await currentUser.save();
+                    res.status(200).json({
+                        message: "Swapped to Unlike"
+                    })
             } 
             else{
             await user.Rating.unshift(0);
