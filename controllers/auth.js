@@ -225,7 +225,7 @@ const follow = async (req, res) => {
     let currentUser = await db.User.findById(req.session.User._id);
     let userToFollow = await db.User.findById(req.params.id);
 
-    if(currentUser._id.toString() !== userToFollow._id.toString()){
+    if(currentUser._id.toString() !== userToFollow._id.toString() && !currentUser.Following.includes(userToFollow._id.toString())){
 
         await currentUser.Following.push(userToFollow._id);
         await userToFollow.Followers.push(currentUser._id);
