@@ -16,7 +16,11 @@ const userSchema = new Schema ({
         type: String,
         required: true,
     },
-    totalListings: Number,
+    totalListings: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     Rating: [Number],
     Followers: [{
         type: mongoose.Schema.Types.ObjectId,

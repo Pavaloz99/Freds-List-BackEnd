@@ -27,9 +27,10 @@ const grabOne = (req, res) => {
     });
 }
 
-const findCategory = (req, res) => {
+const findCategoryElectronics = (req, res) => {
     console.log(req.body);
-    db.Post.find({Category: req.body}).populate('User').exec((err, foundPost) => {
+    db.Post.find({category: "Electronics"}).populate('User').exec((err, foundPost) => {
+        console.log(foundPost)
         if(err) console.log(err);
 
         if(!foundPost) return res.json({
@@ -105,5 +106,5 @@ module.exports = {
     drop,
     grabOne,
     editPost,
-    findCategory,
+    findCategoryElectronics,
 }
