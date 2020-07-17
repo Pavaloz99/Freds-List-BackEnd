@@ -16,6 +16,7 @@ const userSchema = new Schema ({
         type: String,
         required: true,
     },
+    totalListings: Number,
     Rating: [Number],
     Followers: [{
         type: mongoose.Schema.Types.ObjectId,

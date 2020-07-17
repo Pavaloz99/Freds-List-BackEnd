@@ -37,7 +37,7 @@ const create = async (req, res) => {
 
         post.image = await req.file.buffer;
         await post.save();
-
+        await user.totalListings ++;
         await user.Posts.push(post);
         await user.save();
         
