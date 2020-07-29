@@ -145,7 +145,6 @@ const create = async (req, res) => {
 
         post.image = await req.file.buffer;
         await post.save();
-        await user.totalListings ++;
         await user.Posts.push(post);
         await user.save();
         
@@ -180,11 +179,7 @@ const editPost = async (req, res) => {
 const drop = async (req, res) => {
     try{
     const deletedPost = await db.Post.findByIdAndDelete(req.params.id);
-    if(deletedPost.User){
-        const removeUser = await db.User.remove({
-            Posts: deletedPost._id,
-        });
-    }
+    
     res.status(200).json({
         status: 200,
         message: "Post Deleted Successfully"

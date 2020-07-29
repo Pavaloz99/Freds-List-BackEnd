@@ -33,19 +33,31 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const foundUser = await db.User.findOne({email: req.body.email})
-        if(foundUser) {
+        const foundUser = await db.User.findOne({email: req.body.email});
+
+        if(!foundUser) {
+            res.status(401).json({
+                message: "Incorrect Email or Password",
+                auth: false
+            });
+        }
+
+        const match = await bcrypt.compare(req.body.password, foundUser.password);
+
+
+        if(!match){
+            res.status(401).json({
+                message: "Incorrect Email or Password",
+                auth: false
+            })
+        }
+        
             req.session.User = foundUser;
             console.log("this", req.session)
             res.status(200).json({
                 message: "You are successfully logged in",
                 auth: true,
-            })
-        } else {
-            res.status(401).json({
-                message: "Unable to login"
-            })
-        }
+            });
      
         
     } catch (err) {
