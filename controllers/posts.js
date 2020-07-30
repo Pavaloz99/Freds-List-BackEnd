@@ -146,9 +146,10 @@ const create = async (req, res) => {
         post.image = await req.file.buffer;
         await post.save();
         await user.Posts.push(post);
+        user.totalListings = await user.totalListings + 1;
         await user.save();
         
-        await user.totalListings ++;
+       
         
 
         res.status(201).json({ post: post});
