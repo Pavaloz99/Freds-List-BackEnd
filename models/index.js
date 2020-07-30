@@ -6,7 +6,7 @@ const connectionString =
 
 
 
-mongoose.connect(process.env.MONGOLAB_WHITE_URI || connectionString, {
+mongoose.connect(process.env.MONGODB_URI || connectionString, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
