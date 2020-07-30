@@ -24,7 +24,7 @@ app.use(express.json()); // To accept JSON data
 app.use(
     session({
         store: new MongoStore ({
-            url: 'mongodb://localhost:27017/storelib'
+            url: 'mongodb+srv://Pavaloz:L4Z3MBg0C740Dfsp@pablocluster.kfwtr.mongodb.net/store_lib?retryWrites=true&w=majority'
         }),
         secret: "Secret",
         resave: false,
