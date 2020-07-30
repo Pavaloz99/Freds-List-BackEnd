@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
 const connectionString = 
-    "mongodb://localhost:27017/storelib";
+    "mongodb+srv://Pavaloz:L4Z3MBg0C740Dfsp@pablocluster.kfwtr.mongodb.net/store_lib?retryWrites=true&w=majority";
 
 
 
 
-mongoose.connect(connectionString, {
+mongoose.connect(process.env.MONGODB_URI || connectionString, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
