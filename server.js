@@ -1,6 +1,6 @@
 // imports
 const express = require("express");
-// const cors = require("cors");
+const cors = require("cors");
 const routes = require("./routes");
 const bodyParser = require("body-parser");
 const session = require("express-session");
@@ -10,11 +10,11 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 
 // middleware - JSON Parsing
-// let corsOptions = {
-//     origin: "https://ancient-eyrie-01792.herokuapp.com",
-//     credentials: true,
-// }
-// app.use(cors(corsOptions));
+let corsOptions = {
+    origin: "https://ancient-eyrie-01792.herokuapp.com" || "http://localhost:3000",
+    credentials: true,
+}
+app.use(cors(corsOptions));
 //app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.json()); // To accept JSON data
