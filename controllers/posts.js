@@ -148,6 +148,8 @@ const create = async (req, res) => {
         await user.Posts.push(post);
         await user.save();
         
+        await user.totalListings ++;
+        
 
         res.status(201).json({ post: post});
     } catch(err) {
