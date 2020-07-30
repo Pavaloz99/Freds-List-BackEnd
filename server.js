@@ -11,7 +11,7 @@ const app = express();
 
 // middleware - JSON Parsing
 let corsOptions = {
-    origin: "https://ancient-eyrie-01792.herokuapp.com" || "http://localhost:3000",
+    origin: ["https://ancient-eyrie-01792.herokuapp.com", "http://localhost:3000"],
     credentials: true,
 }
 app.use(cors(corsOptions));
