@@ -100,7 +100,11 @@ const anyAccount = async (req, res) => {
 
 
 const logout = async (req, res) => {
-    return await req.session.destroy();
+    await req.session.destroy(() => {
+        return res.status(200).json({
+            message: "Successfully logged out"
+        });
+    });
 }
 
 
