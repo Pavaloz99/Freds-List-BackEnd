@@ -241,6 +241,18 @@ const follow = async (req, res) => {
     let currentUser = await db.User.findById(req.session.User._id);
     let userToFollow = await db.User.findById(req.params.id);
 
+    if(currentUser._id.toString() !== userToFollow._id.toString() && currentUser.Following.includes(userToFollow._id.toString())){
+        for(let i = 0; i < currentUser.Following.length; i++){
+            if(currentUser.Following[i] === userToFollow._id.toString()){
+                await currentUser.Following.splice(i,1);
+                return res.status(200).json({
+                    status: 200,
+                    message: `You've Unfollowed ${userToFollow.username}`
+                });
+            }
+        }
+    }
+
     if(currentUser._id.toString() !== userToFollow._id.toString() && !currentUser.Following.includes(userToFollow._id.toString())){
 
         await currentUser.Following.push(userToFollow._id);
